@@ -3,6 +3,13 @@
 /node_modules
 /build
 
+/prisma/migrations/
+/prisma/dev.db*
+/prisma/*.db
+/prisma/*.db-journal
+
+generated/
+
 # Logs
 logs
 *.log
