@@ -1,0 +1,45 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User{
+    id Int @id @default(autoincrement())
+    email String @unique
+    password String
+    team Team?
+    token String
+}
+
+model Team{
+    id Int @id @default(autoincrement())
+    name String 
+    budget Decimal @default(5000000) @db.Decimal(10, 2)
+    user User @relation(fields:[userId], references:[id], onDelete: Cascade)
+    userId Int @unique
+    players Player[]
+}
+
+model Player{
+    id Int @id @default(autoincrement())
+    name String
+    price Decimal @db.Decimal(10, 2)
+    role Role
+    picture String
+    team Team? @relation(fields:[teamId], references:[id], onDelete: Cascade)
+    teamId Int?
+    isOnTransferList Boolean @default(false)
+    askingPrice     Decimal? @db.Decimal(10, 2)
+}
+
+enum Role {
+  GOALKEEPER
+  DEFENDER
+  MIDFIELDER
+  FORWARD
+}
+
