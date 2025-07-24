@@ -1,5 +1,5 @@
 import { Body, Controller, Get,Post, Query, UsePipes } from "@nestjs/common";
-import { ZodValidationPipe } from "src/app/pipes/zod-validation-pipe";
+import { ZodValidationPipe } from "../../pipes/zod-validation-pipe";
 import { CreateUser, createUserSchema } from "./user.schema";
 import { UserService } from "./user.service";
 import { FirebaseService } from "../firebase/firebase.service";

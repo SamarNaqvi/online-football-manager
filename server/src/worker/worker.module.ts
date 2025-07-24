@@ -3,9 +3,16 @@ import { Module } from '@nestjs/common';
 import { ConsumerService } from './worker.processor';
 import { BullModule } from '@nestjs/bullmq';
 import { TeamModule } from '../app/modules/team/team.module';
+import { UserModule } from '../app/modules/user/user.module';
+import { FirebaseModule } from '../app/modules/firebase/firebase.module';
 
 @Module({
   imports: [
+     BullModule.forRoot({
+      connection: {
+        url: process.env.REDIS_URL || 'redis://localhost:6379',
+      },
+    }),
     BullModule.registerQueue({
       name: 'build-team-queue',
       connection: {
@@ -13,6 +20,8 @@ import { TeamModule } from '../app/modules/team/team.module';
       },
     }),
     TeamModule,
+    UserModule,
+    FirebaseModule
   ],
   providers: [ConsumerService],
 })

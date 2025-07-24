@@ -18,10 +18,10 @@ export class UserService {
       return user;
     } else {
       const user = await this.prismaService.user.create({data});
-      const jobId =  await this.audioQueue.add('build-team-queue',{
+      await this.audioQueue.add('build-team-queue',{
         userId: user.id
       });
-      return {...user, jobId};
+      return user;
     }
   }
 

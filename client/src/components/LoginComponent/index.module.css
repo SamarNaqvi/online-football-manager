@@ -1,0 +1,8 @@
+.loginContainer{
+    display: flex;
+    flex-direction: column;
+    border:1px solid lightgray;
+    border-radius: 5px;
+    gap:1rem;
+    width: 35rem;
+}

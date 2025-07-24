@@ -7,10 +7,10 @@ import { BullModule } from '@nestjs/bullmq';
   imports: [
     BullModule.registerQueue({
       name: 'build-team-queue',
-      processors: [],
     }),
   ],
   providers: [UserService],
   controllers: [UserController],
+   exports:[UserService],
 })
 export class UserModule {}

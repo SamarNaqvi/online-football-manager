@@ -2,8 +2,8 @@ import { OnWorkerEvent, Processor, WorkerHost } from '@nestjs/bullmq';
 import { Logger } from '@nestjs/common';
 import { Job } from 'bullmq';
 import { TeamService } from '../app/modules/team/team.service';
-import { FirebaseService } from 'src/app/modules/firebase/firebase.service';
-import { UserService } from 'src/app/modules/user/user.service';
+import { FirebaseService } from '../app/modules/firebase/firebase.service';
+import { UserService } from '../app/modules/user/user.service';
 
 @Processor('build-team-queue')
 export class ConsumerService extends WorkerHost {
@@ -21,7 +21,7 @@ export class ConsumerService extends WorkerHost {
       `Processing job ${job.id} of type ${job.name} in PID ${process.pid}.`,
     );
 
-    const res = await this.teamService.createTeam(job.data.userId);
+    await this.teamService.createTeam(job.data.userId);
 
     return { value: job.data.userId };
   }
@@ -46,13 +46,13 @@ export class ConsumerService extends WorkerHost {
   @OnWorkerEvent('completed')
   async onCompleted(job: Job) {
     console.log(`Job ${job.id} of type ${job.name} completed.`);
-    const userId = job.returnvalue;
+    const userId = job.returnvalue.value;
     const userToken = await this.userService.getUserToken(userId);
     const token = userToken?.token;
     const payload = {
       notification: {
         title: 'New Notification',
-        body: 'Hello, Your Team is Ready Please Try Reloading Page',
+        body: 'Hello, Your Team is Ready Please Try Reloading Visting Team Page View',
       },
     };
     if (token) this.firebaseService.sendNotification(token, payload);

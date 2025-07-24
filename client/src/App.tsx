@@ -1,59 +1,25 @@
-import React, { useEffect, useState } from 'react';
-import { messaging, getToken, onMessage } from './firebase';
+import { useContext } from "react";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router";
+import { LoginComponent } from "./components";
+import { LOGIN_PATH, TEAM_PATH } from "./constant/appPaths";
+import { UserContext } from "./context/UserContext";
+import { useNotification } from "./hooks/useNotification";
+
 
 function App() {
-  const [token, setToken] = useState(null);
-  const [notification, setNotification] = useState(null);
-
-  useEffect(() => {
-    // Request permission to receive notifications
-    Notification.requestPermission().then((permission) => {
-      if (permission === 'granted') {
-        // Get FCM registration token for this device/browser
-        if(token) return;
-        getToken(messaging, { vapidKey: import.meta.env.VITE_VAPID_KEY })
-          .then((currentToken) => {
-            if (currentToken) {
-              setToken(currentToken);
-          
-              console.log('FCM token:', currentToken);
-            } else {
-              console.log('No registration token available. Request permission to generate one.');
-            }
-          })
-          .catch((err) => {
-            console.log('An error occurred while retrieving token. ', err);
-          });
-      } else {
-        console.log('Notification permission denied');
-      }
-    });
-
-    // Listen for foreground messages
-    const unsubscribe = onMessage(messaging, (payload) => {
-      console.log('Message received. ', payload);
-      setNotification(payload.notification);
-      // Optionally show custom UI notification 
-    });
-
-    return () => unsubscribe();
-  }, []);
-
-  // Send this token to your backend to store it and use for notifications
-
+  const {currentUser, setCurrentUser} = useContext(UserContext);
+   const {token} = useNotification();
+   
   return (
-    <div>
-      <h1>FCM Push Notifications</h1>
-      <p>Your device token (send this to backend):</p>
-      <textarea rows={5} style={{width: 400}} value={token || 'Loading...'} readOnly />
-      {notification && (
-        <div style={{marginTop: 20, padding: 10, border: '1px solid #ccc'}}>
-          <h3>New Notification</h3>
-          <p><b>{notification.title}</b></p>
-          <p>{notification.body}</p>
-        </div>
-      )}
-    </div>
+    <BrowserRouter>
+        <Routes>
+             <Route path="/" element={currentUser ? <Navigate to={TEAM_PATH} /> : <Navigate to={LOGIN_PATH} />} /> 
+             <Route path={LOGIN_PATH} element={<LoginComponent token={token}/>}/>
+             {/* <Route path={TEAM_PATH} element={<TeamComponent/>}/>
+             <Route path={TRANSFER_LIST_PATH} element={<TransferListComponent/>}/> */}
+             <Route path="*" element={currentUser ? <Navigate to={TEAM_PATH} /> : <Navigate to={LOGIN_PATH} />} /> 
+        </Routes>
+    </BrowserRouter>
   );
 }
 
