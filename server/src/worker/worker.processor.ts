@@ -6,7 +6,7 @@ import { FirebaseService } from '../app/modules/firebase/firebase.service';
 import { UserService } from '../app/modules/user/user.service';
 
 @Processor('build-team-queue')
-export class ConsumerService extends WorkerHost {
+export class WorkerService extends WorkerHost {
   constructor(
     private readonly userService: UserService,
     private readonly teamService: TeamService,
@@ -14,7 +14,7 @@ export class ConsumerService extends WorkerHost {
   ) {
     super();
   }
-  logger = new Logger('ConsumerService');
+  logger = new Logger('WorkerService');
 
   async process(job: Job<any, any, string>): Promise<any> {
     this.logger.log(
@@ -47,12 +47,13 @@ export class ConsumerService extends WorkerHost {
   async onCompleted(job: Job) {
     console.log(`Job ${job.id} of type ${job.name} completed.`);
     const userId = job.returnvalue.value;
+    const userEmail = await this.userService.getUserEmail(userId);
     const userToken = await this.userService.getUserToken(userId);
     const token = userToken?.token;
     const payload = {
       notification: {
         title: 'New Notification',
-        body: 'Hello, Your Team is Ready Please Try Reloading Visting Team Page View',
+        body: `Hello ${userEmail?.email}, Your Team is ready, Please try visting Team Page View`,
       },
       data: {
         type: 'team-creation',

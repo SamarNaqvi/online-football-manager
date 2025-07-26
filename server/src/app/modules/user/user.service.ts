@@ -28,4 +28,8 @@ export class UserService {
   async getUserToken(userId:number){
     return await this.prismaService.user.findUnique({where:{id:userId}, select:{token:true}});
   }
+
+  async getUserEmail(userId:number){
+    return await this.prismaService.user.findUnique({where:{id:userId}, select:{email:true}})
+  }
 }

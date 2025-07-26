@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
-import { Prisma } from '@prisma/client';
 import { ROLE_REQUIREMENTS } from '../../constant';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class TeamService {
@@ -48,7 +47,6 @@ export class TeamService {
         return newVal;
       }, Number(team?.budget));
 
-      
       const teamWithPlayers = await this.prismaService.team.update({
         where: { id: team?.id },
         data: {
@@ -63,7 +61,7 @@ export class TeamService {
       return { team: teamWithPlayers, players, success: true };
     } catch (exception) {
       console.log('Team creation failed: ', exception);
-      
+
       const team = await this.prismaService.team.findUnique({
         where: { userId: parseInt(userId) },
       });
@@ -84,8 +82,8 @@ export class TeamService {
     const team = await this.prismaService.team.findUnique({
       where: { userId: user?.id },
     });
-    if(!team){
-      return { players:[], team:{}, status: 'PENDING' };
+    if (!team) {
+      return { players: [], team: {}, status: 'PENDING' };
     }
     const players = await this.prismaService.player.findMany({
       where: { teamId: team?.id },

@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
-
-import { ConsumerService } from './worker.processor';
+import { WorkerService } from './worker.processor';
 import { BullModule } from '@nestjs/bullmq';
 import { TeamModule } from '../app/modules/team/team.module';
 import { UserModule } from '../app/modules/user/user.module';
@@ -23,6 +22,6 @@ import { FirebaseModule } from '../app/modules/firebase/firebase.module';
     UserModule,
     FirebaseModule
   ],
-  providers: [ConsumerService],
+  providers: [WorkerService],
 })
 export class WorkerModule {}
