@@ -18,7 +18,6 @@ const openNotification = useContext(NotificationContext);
             if (currentToken) {
               // @ts-ignore
               setToken(currentToken);
-              console.log("currentToken", currentToken);
             } else {
               console.log('No registration token available. Request permission to generate one.');
             }
@@ -33,10 +32,11 @@ const openNotification = useContext(NotificationContext);
 
     // Listen for foreground messages
     const unsubscribe = onMessage(messaging, (payload) => {
+      console.log("payload", payload);
       //@ts-ignore
-      openNotification && openNotification("topRight", payload?.notification?.title, payload?.notification?.body);
+      openNotification && openNotification(payload?.notification?.title, payload?.notification?.body, "success");
       //@ts-ignore
-      setNotification(payload?.notification);
+      setNotification({...payload?.notification, ...payload?.data});
 
     });
 

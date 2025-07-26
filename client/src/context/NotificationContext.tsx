@@ -2,10 +2,12 @@ import React, { type ReactNode, useMemo } from "react";
 import { notification } from "antd";
 import type { NotificationPlacement } from "antd/es/notification/interface";
 
+type NotificationType= "success" | "error" | "info";
+
 type OpenNotificationFn = (
-  placement: NotificationPlacement,
   message: string,
   description: string,
+  type:NotificationType
 ) => void;
 
 export const NotificationContext = React.createContext<OpenNotificationFn | null>(null);
@@ -18,15 +20,14 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({ chil
   const [api, contextHolder] = notification.useNotification();
 
   const openNotification = (
-    placement: NotificationPlacement,
     message: string,
     description: string,
-    type:string="info",
+    type: NotificationType="info",
   ) => {
     api[type]({
       message,
       description,
-      placement,
+      placement:"topRight",
       duration:10,
     });
   };

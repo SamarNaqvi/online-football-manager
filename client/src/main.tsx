@@ -1,15 +1,24 @@
-import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
-import "./index.css";
-import App from "./App.tsx";
 import "antd/dist/reset.css";
-import { UserProvider } from "./context/UserContext.tsx";
+import { createRoot } from "react-dom/client";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import App from "./App.tsx";
 import { NotificationProvider } from "./context/NotificationContext.tsx";
+import "./index.css";
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000,
+    },
+  },
+});
 
 createRoot(document.getElementById("root")!).render(
-  <NotificationProvider>
-    <UserProvider>
+  <QueryClientProvider client={queryClient}>
+    <NotificationProvider>
       <App />
-    </UserProvider>
-  </NotificationProvider>
+    </NotificationProvider>
+    <ReactQueryDevtools initialIsOpen={false} />
+  </QueryClientProvider>
 );

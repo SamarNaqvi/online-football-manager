@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "@ant-design/icons": "5.x",
+    "@tanstack/react-query": "^5.83.0",
+    "@tanstack/react-query-devtools": "^5.83.0",
     "antd": "^5.26.6",
     "axios": "^1.11.0",
     "firebase": "^12.0.0",

@@ -2,28 +2,25 @@ import { Button, Flex, Form, Input, Typography } from "antd";
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router";
 import { TEAM_PATH } from "../../constant/appPaths";
-import { UserContext } from "../../context/UserContext";
 import { loginUser } from "../../service";
 import styles from "./index.module.css";
+import { NotificationContext } from "../../context/NotificationContext";
+import { useLogin } from "../../hooks/useUser";
 
 const { Title } = Typography;
 
 const LoginComponent = ({ token }) => {
-  const { setCurrentUser } = useContext(UserContext);
+  const openNotification = useContext(NotificationContext);
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
+  const loginMutation = useLogin();
 
   const signInUser = async (values) => {
     try {
-      setLoading(true);
-      const resp = await loginUser({ token, ...values });
-      setCurrentUser(resp);
+      await loginMutation.mutateAsync({ token, ...values });
       navigate(TEAM_PATH);
     } catch (error) {
       console.error(`Something Went Wrong: ${error?.message}`);
-      setError(error?.message);
-    } finally {
-      setLoading(false);
+      openNotification && openNotification("Something Went Wrong",error?.message, "error");
     }
   };
 
@@ -32,7 +29,7 @@ const LoginComponent = ({ token }) => {
   return (
     <Flex align="center" justify="center" style={{ height: "100vh" }}>
       <div className={styles.loginContainer}>
-        <Title level={4} style={{ padding: "0rem 1rem" }}>
+        <Title level={4} style={{ padding: "1rem" }}>
           Login
         </Title>
         <Form
@@ -65,7 +62,7 @@ const LoginComponent = ({ token }) => {
               size="large"
               htmlType="submit"
               block
-              loading={loading}
+              loading={loginMutation.isPending}
             >
               Login
             </Button>
