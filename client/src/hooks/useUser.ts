@@ -4,9 +4,11 @@ import { loginUser } from "../service";
 interface User {
   name: string;
   email: string;
+  token:string;
+  access_token:string
 }
 
-const getStoredUser = (): User | null => {
+export const getStoredUser = (): User | null => {
   const storedUser = localStorage.getItem('currentUser');
   return storedUser ? JSON.parse(storedUser) : null;
 };
@@ -34,7 +36,8 @@ export const useLogin = () => {
   return useMutation({
     mutationFn: loginUser,
     onSuccess: (response) => {
-      const userData = response.data;
+      //@ts-ignore
+      const userData = response?.data;
       storeUser(userData);
       queryClient.setQueryData(["user"], userData);
     },

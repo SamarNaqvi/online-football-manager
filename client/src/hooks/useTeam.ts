@@ -6,6 +6,7 @@ export const useTeam = (userEmail: string) => {
     queryKey: ["team", userEmail],
     queryFn: () => fetchTeam(userEmail),
     enabled: !!userEmail,
+    //@ts-ignore
     select:(resp)=>({...resp?.data?.team, players:resp?.data?.players})
   });
 };
