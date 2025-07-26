@@ -54,6 +54,9 @@ export class ConsumerService extends WorkerHost {
         title: 'New Notification',
         body: 'Hello, Your Team is Ready Please Try Reloading Visting Team Page View',
       },
+      data: {
+        type: 'team-creation',
+      },
     };
     if (token) this.firebaseService.sendNotification(token, payload);
   }

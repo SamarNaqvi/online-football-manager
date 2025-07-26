@@ -6,12 +6,14 @@ import { TeamModule } from './modules/team/team.module';
 import { UserModule } from './modules/user/user.module';
 import { BullModule } from '@nestjs/bullmq';
 import { FirebaseModule } from './modules/firebase/firebase.module';
+import { PlayerModule } from './modules/player/player.module';
 
 @Module({
   imports: [
     UserModule,
     PrismaModule,
     FirebaseModule,
+    PlayerModule,
        BullModule.forRootAsync({
       useFactory: () => ({
         connection: {

@@ -22,6 +22,7 @@ model Team{
     user User @relation(fields:[userId], references:[id], onDelete: Cascade)
     userId Int @unique
     players Player[]
+    status TeamStatus @default(PENDING)
 }
 
 model Player{
@@ -33,7 +34,7 @@ model Player{
     team Team? @relation(fields:[teamId], references:[id], onDelete: Cascade)
     teamId Int?
     isOnTransferList Boolean @default(false)
-    askingPrice     Decimal? @db.Decimal(10, 2)
+    askingPrice Decimal? @db.Decimal(10, 2)
 }
 
 enum Role {
@@ -43,3 +44,8 @@ enum Role {
   FORWARD
 }
 
+enum TeamStatus {
+  PENDING
+  DONE
+  FAILED
+}

@@ -13,7 +13,7 @@ export class UserController{
     @Post("login")
     @UsePipes(new ZodValidationPipe(createUserSchema))
     async register(@Body() data: CreateUser){
-       return {data: await this.userService.createUser(data)};
+       return await this.userService.createUser(data);
     }
 
    @Get('run')

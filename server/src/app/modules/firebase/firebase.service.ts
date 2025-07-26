@@ -22,7 +22,8 @@ export class FirebaseService {
     try {
       const result = await admin.messaging().send({
         token,
-        notification: payload.notification,
+        notification: payload?.notification,
+        data: payload?.data
       });
       this.logger.log(`Notification sent successfully: ${JSON.stringify(result)}`);
       return result;

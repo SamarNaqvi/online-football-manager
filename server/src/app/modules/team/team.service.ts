@@ -1,48 +1,95 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Prisma } from '@prisma/client';
+import { ROLE_REQUIREMENTS } from '../../constant';
 
 @Injectable()
 export class TeamService {
   constructor(private prismaService: PrismaService) {}
 
   async createTeam(userId: string) {
-    const [goalkeepers, defenders, midfielders, forwards] = await Promise.all([
-      this.prismaService.player.findMany({
-        where: { role: 'GOALKEEPER', teamId: null },
-        take: 3,
-      }),
-      this.prismaService.player.findMany({
-        where: { role: 'DEFENDER', teamId: null },
-        take: 6,
-      }),
-      this.prismaService.player.findMany({
-        where: { role: 'MIDFIELDER', teamId: null },
-        take: 6,
-      }),
-      this.prismaService.player.findMany({
-        where: { role: 'FORWARD', teamId: null },
-        take: 5,
-      }),
-    ]);
-    const players = [...goalkeepers, ...defenders, ...midfielders, ...forwards];
-    const teamWithPlayers = await this.prismaService.team.create({
-      data: {
-        name: `Team ${userId}`,
-        userId: parseInt(userId),
-        players: {
-          connect: players.map((player) => ({ id: player.id })),
+    try {
+      const team = await this.prismaService.team.create({
+        data: {
+          userId: parseInt(userId),
+          name: `Team ${userId}`,
         },
-      },
-    });
+      });
 
-    return { team: teamWithPlayers, players };
+      const [goalkeepers, defenders, midfielders, forwards] = await Promise.all(
+        [
+          this.prismaService.player.findMany({
+            where: { role: 'GOALKEEPER', teamId: null },
+            take: ROLE_REQUIREMENTS.GOALKEEPER,
+          }),
+          this.prismaService.player.findMany({
+            where: { role: 'DEFENDER', teamId: null },
+            take: ROLE_REQUIREMENTS.DEFENDER,
+          }),
+          this.prismaService.player.findMany({
+            where: { role: 'MIDFIELDER', teamId: null },
+            take: ROLE_REQUIREMENTS.MIDFIELDER,
+          }),
+          this.prismaService.player.findMany({
+            where: { role: 'FORWARD', teamId: null },
+            take: ROLE_REQUIREMENTS.FORWARD,
+          }),
+        ],
+      );
+
+      const players = [
+        ...goalkeepers,
+        ...defenders,
+        ...midfielders,
+        ...forwards,
+      ];
+      const updatedBudget = players?.reduce((total, curr) => {
+        const newVal = total - Number(curr.price);
+        return newVal;
+      }, Number(team?.budget));
+
+      
+      const teamWithPlayers = await this.prismaService.team.update({
+        where: { id: team?.id },
+        data: {
+          players: {
+            connect: players.map((player) => ({ id: player.id })),
+          },
+          budget: updatedBudget,
+          status: 'DONE',
+        },
+      });
+
+      return { team: teamWithPlayers, players, success: true };
+    } catch (exception) {
+      console.log('Team creation failed: ', exception);
+      
+      const team = await this.prismaService.team.findUnique({
+        where: { userId: parseInt(userId) },
+      });
+
+      if (team) {
+        await this.prismaService.team.update({
+          where: { userId: parseInt(userId) },
+          data: { status: 'FAILED' },
+        });
+      }
+
+      return { team: {}, players: [], success: false };
+    }
   }
 
-  async getTeam(teamId: number){
-    const team = await this.prismaService.team.findUnique({where:{id:teamId}});
-    const players = await this.prismaService.player.findMany({where:{teamId:teamId}});
-    
-    return {players, team};
+  async getTeam(email: string) {
+    const user = await this.prismaService.user.findUnique({ where: { email } });
+    const team = await this.prismaService.team.findUnique({
+      where: { userId: user?.id },
+    });
+    if(!team){
+      return { players:[], team:{}, status: 'PENDING' };
+    }
+    const players = await this.prismaService.player.findMany({
+      where: { teamId: team?.id },
+    });
+    return { players, team, status: team?.status ?? 'PENDING' };
   }
 }
