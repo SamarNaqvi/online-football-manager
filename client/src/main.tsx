@@ -19,6 +19,5 @@ createRoot(document.getElementById("root")!).render(
     <NotificationProvider>
       <App />
     </NotificationProvider>
-    <ReactQueryDevtools initialIsOpen={false} />
   </QueryClientProvider>
 );

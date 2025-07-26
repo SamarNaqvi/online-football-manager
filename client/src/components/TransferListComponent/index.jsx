@@ -74,7 +74,7 @@ function TransferListComponent() {
   }, [queryString]);
 
   return (
-    <div style={{ padding: "2rem", height: "100vh" }}>
+    <div style={{ padding: "2rem", height: "100%", background:"#acd4f8ff" }}>
       <Title>Transfer Market</Title>
       <Form
         name="filters"
@@ -117,10 +117,11 @@ function TransferListComponent() {
         <Loader />
       ) : (
         <Flex
-          gap={20}
+          gap={80}
           wrap
           style={{ marginTop: "20px", background: "transparent" }}
           align="center"
+          justify="start"
         >
           {players &&
             players?.map((player) => (

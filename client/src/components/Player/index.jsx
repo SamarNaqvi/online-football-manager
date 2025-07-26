@@ -8,7 +8,7 @@ function Player({ player, onClick, teamsPage }) {
   const teamName = player?.team?.name;
   const isOwnPlayer = player?.user?.email === currentUser?.email;
   return (
-    <Card style={{ width: "20rem" }}>
+    <Card style={{ width: "25rem" }}>
       <Flex vertical align="center">
         <Image src={player?.picture} />
       </Flex>

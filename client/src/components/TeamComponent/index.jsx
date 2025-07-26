@@ -1,7 +1,5 @@
-import { Button, Flex, Form, Input, Modal, Result, Typography } from "antd";
+import { Flex, Form, Input, Modal, Result, Typography } from "antd";
 import { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router";
-import { TRANSFER_LIST_PATH } from "../../constant/appPaths";
 import { NotificationContext } from "../../context/NotificationContext";
 import { useTeam, useUpdatePlayerTransferStatus } from "../../hooks/useTeam";
 import { useUser } from "../../hooks/useUser";
@@ -13,7 +11,6 @@ const { Title } = Typography;
 function TeamComponent({ notification }) {
   const [form] = Form.useForm();
   const { data: currentUser } = useUser();
-  const navigate = useNavigate();
   const [modalData, setModalData] = useState(null);
   const openNotification = useContext(NotificationContext);
 
@@ -100,14 +97,13 @@ function TeamComponent({ notification }) {
     );
 
   return (
-    <div style={{ padding: "2rem", background: "#f6fcf2ff" }}>
-      <Button onClick={()=>navigate(TRANSFER_LIST_PATH)}>Click me</Button>
+    <div style={{ padding: "2rem", background: "#acd4f8ff" }}>
       <Flex vertical>
         <Title level={3}>{name}</Title>
-        <div>Budget - ${budget}</div>
+        <div style={{fontSize:"18px"}}>Budget - ${budget}</div>
       </Flex>
       <Flex
-        gap={20}
+        gap={80}
         wrap
         style={{ marginTop: "20px", background: "transparent" }}
         align="center"
