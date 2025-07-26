@@ -4,3 +4,7 @@
       MIDFIELDER: 6,
       FORWARD: 5,
     };
+
+export const jwtConstants = {
+  secret: 'TOPPP SECRET',
+};
