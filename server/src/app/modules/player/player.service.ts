@@ -36,11 +36,23 @@ export class PlayerService {
     playerStatus: boolean,
     askingPrice: number,
   ) {
-    const queryData = {isOnTransferList: playerStatus};
-    if(askingPrice>=0){
-        queryData["askingPrice"] = askingPrice;
+    // Checking if removing player would leave team with less than 15 players
+    if (!playerStatus) { 
+      const player = await this.prismaService.player.findUnique({
+        where: { id: playerId },
+        include: { team: { include: { players: true } } },
+      });
+
+      if (player?.team?.players && player.team.players.length <= 15) {
+        throw new ForbiddenException('Teams must have at least 15 players');
+      }
     }
-    
+
+    const queryData = { isOnTransferList: playerStatus };
+    if (askingPrice >= 0) {
+      queryData['askingPrice'] = askingPrice;
+    }
+
     return await this.prismaService.player.update({
       where: { id: playerId },
       data: queryData,
@@ -64,7 +76,7 @@ export class PlayerService {
         throw new ForbiddenException('Unable to find Entities');
       }
 
-      if (team.players?.length === 25) {
+      if (team.players?.length >= 25) {
         throw new ForbiddenException("Teams can't have more than 25 players");
       }
 
