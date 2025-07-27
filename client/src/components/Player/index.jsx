@@ -6,9 +6,10 @@ function Player({ player, onClick, teamsPage }) {
   const { data: currentUser } = useUser();
   const isOnTransferList = player?.isOnTransferList;
   const teamName = player?.team?.name;
-  const isOwnPlayer = player?.user?.email === currentUser?.email;
+  const isOwnPlayer = player?.team?.user?.email === currentUser?.email;
+ 
   return (
-    <Card style={{ width: "25rem" }}>
+    <Card style={{ width: "25rem", height:"22rem" }}>
       <Flex vertical align="center">
         <Image src={player?.picture} />
       </Flex>

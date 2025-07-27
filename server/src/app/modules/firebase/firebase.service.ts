@@ -32,4 +32,19 @@ export class FirebaseService {
       throw error;
     }
   }
+
+  async sendNotificationMulti(tokens:string [],payload: { notification: { title: string, body: string }, data?: any }) {
+    try {
+      const result = await admin.messaging().sendEachForMulticast({
+        tokens,
+        notification: payload?.notification,
+        data: payload?.data
+      });
+      this.logger.log(`Notification sent successfully: ${JSON.stringify(result)}`);
+      return result;
+    } catch (error) {
+      this.logger.error('Error sending notification:', error);
+      throw error;
+    }
+  }
 }

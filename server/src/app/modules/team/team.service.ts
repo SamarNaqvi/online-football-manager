@@ -83,11 +83,11 @@ export class TeamService {
       where: { userId: user?.id },
     });
     if (!team) {
-      return { players: [], team: {}, status: 'PENDING' };
+      return { players: [], team: {status: 'PENDING'} };
     }
     const players = await this.prismaService.player.findMany({
       where: { teamId: team?.id },
     });
-    return { players, team, status: team?.status ?? 'PENDING' };
+    return { players, team:{...team} };
   }
 }

@@ -60,7 +60,7 @@ function App() {
               element={
                 <Suspense fallback={<Loader />}>
                   <ProtectedRoute
-                    Component={<TransferComp />}
+                    Component={<TransferComp notification={notification} />}
                     user={currentUser}
                   />
                 </Suspense>

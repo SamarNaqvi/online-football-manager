@@ -17,7 +17,7 @@ function TeamComponent({ notification }) {
   const { data, isLoading, error, refetch } = useTeam(currentUser?.email);
   const updatePlayerMutation = useUpdatePlayerTransferStatus();
 
-  const {players = [], name="", budget=""} = data ?? {};
+  const { players = [], name = "", budget = "" } = data ?? {};
 
   const canAddPLayerToTransferList = (isOnTransferList) => {
     // means we're removing player from transfer list
@@ -71,7 +71,16 @@ function TeamComponent({ notification }) {
   };
 
   useEffect(() => {
-    notification?.type === "team-creation" && refetch();
+    if (
+      notification?.type === "team-creation" ||
+      notification?.type === "buy-player"
+    )
+    {
+      setTimeout(()=>{
+        refetch();
+      },[5000])
+      
+    }
   }, [notification?.type]);
 
   if (isLoading) return <Loader />;
@@ -100,7 +109,7 @@ function TeamComponent({ notification }) {
     <div style={{ padding: "2rem", background: "#acd4f8ff" }}>
       <Flex vertical>
         <Title level={3}>{name}</Title>
-        <div style={{fontSize:"18px"}}>Budget - ${budget}</div>
+        <div style={{ fontSize: "18px" }}>Budget - ${budget}</div>
       </Flex>
       <Flex
         gap={80}

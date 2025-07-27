@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { Button, Flex, Form, Input, Typography, notification } from "antd";
+import { Button, Flex, Form, Input, Typography } from "antd";
 import { useContext, useEffect, useState } from "react";
 import { NotificationContext } from "../../context/NotificationContext";
 import { useTeam } from "../../hooks/useTeam";
@@ -10,7 +10,7 @@ import Player from "../Player";
 
 const { Title } = Typography;
 
-function TransferListComponent() {
+function TransferListComponent({notification}) {
   const [queryString, setQueryString] = useState("");
   const { data: currentUser } = useUser();
   const openNotification = useContext(NotificationContext);
@@ -54,11 +54,6 @@ function TransferListComponent() {
         playerId,
         playerTeamId,
       });
-      openNotification(
-        "Player Purchased Successfully",
-        `Player- ${playerName} added to your team`,
-        "success"
-      );
     } catch (exception) {
 
       openNotification(
@@ -68,6 +63,14 @@ function TransferListComponent() {
       );
     }
   };
+
+  useEffect(()=>{
+
+    if(notification?.type === "change-status")
+      {
+         refetch();
+      }
+  },[notification?.type]);
 
   useEffect(() => {
     refetch();

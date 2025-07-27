@@ -48,7 +48,7 @@ export class WorkerService extends WorkerHost {
     console.log(`Job ${job.id} of type ${job.name} completed.`);
     const userId = job.returnvalue.value;
     const userEmail = await this.userService.getUserEmail(userId);
-    const userToken = await this.userService.getUserToken(userId);
+    const userToken = await this.userService.getUserToken({id:userId});
     const token = userToken?.token;
     const payload = {
       notification: {

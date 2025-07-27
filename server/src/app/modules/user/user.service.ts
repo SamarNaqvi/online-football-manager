@@ -17,19 +17,41 @@ export class UserService {
     if (user) {
       return user;
     } else {
-      const user = await this.prismaService.user.create({data});
-      await this.audioQueue.add('build-team-queue',{
-        userId: user.id
+      const user = await this.prismaService.user.create({ data });
+      await this.audioQueue.add('build-team-queue', {
+        userId: user.id,
       });
       return user;
     }
   }
 
-  async getUserToken(userId:number){
-    return await this.prismaService.user.findUnique({where:{id:userId}, select:{token:true}});
+  async getUserToken(whereQuery) {
+    return await this.prismaService.user.findUnique({
+      where: whereQuery,
+      select: { token: true },
+    });
   }
 
-  async getUserEmail(userId:number){
-    return await this.prismaService.user.findUnique({where:{id:userId}, select:{email:true}})
+  async getUserEmail(userId: number) {
+    return await this.prismaService.user.findUnique({
+      where: { id: userId },
+      select: { email: true },
+    });
+  }
+
+  async getAllTokens(userEmail: string) {
+    return await this.prismaService.user.findMany({
+      where: {
+        token: {
+          not: '',
+        },
+        email: {
+          not: userEmail,
+        },
+      },
+      select: {
+        token: true,
+      },
+    });
   }
 }

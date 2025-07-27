@@ -1,17 +1,16 @@
 import {
   Body,
   Controller,
-  DefaultValuePipe,
   Get,
-  ParseIntPipe,
-  Patch,
   Put,
   Query,
+  Req,
   UseGuards,
   UsePipes,
 } from '@nestjs/common';
-import { PlayerService } from './player.service';
+import { Request } from 'express';
 import { ZodValidationPipe } from 'src/app/pipes/zod-validation-pipe';
+import { AuthGuard } from '../auth/auth.guard';
 import {
   BuyPlayerSchema,
   buyPlayerSchema,
@@ -20,13 +19,13 @@ import {
   playerUpdateStatusSchema,
   PlayerUpdateStatusSchema,
 } from './player.schema';
-import { AuthGuard } from '../auth/auth.guard';
+import { PlayerService } from './player.service';
 
+@UseGuards(AuthGuard)
 @Controller('players')
 export class PlayerController {
   constructor(private playerService: PlayerService) {}
 
-  @UseGuards(AuthGuard)
   @Get('transfer-list')
   @UsePipes(new ZodValidationPipe(playerQuerySchema))
   async getTransferListPlayers(@Query() query: PlayerQuerySchema) {
@@ -39,23 +38,31 @@ export class PlayerController {
     };
   }
 
-  @UseGuards(AuthGuard)
   @Put('change-status')
   @UsePipes(new ZodValidationPipe(playerUpdateStatusSchema))
-  async changePlayerStatus(@Body() updateData: PlayerUpdateStatusSchema) {
+  async changePlayerStatus(@Req() request: Request, @Body() updateData: PlayerUpdateStatusSchema) {
     const { playerId, askingPrice, status } = updateData;
+    const email = (request as any).user?.email;
+  
     return await this.playerService.changeTransferListStatus(
       playerId,
       status,
       askingPrice,
+      email
     );
   }
 
-  @UseGuards(AuthGuard)
   @Put('buy-player')
   @UsePipes(new ZodValidationPipe(buyPlayerSchema))
-  async buyPlayer(@Body() data: BuyPlayerSchema) {
+  async buyPlayer(@Req() request: Request, @Body() data: BuyPlayerSchema) {
     const { teamId, playerTeamId, playerId } = data;
-    return await this.playerService.buyPlayer(teamId, playerTeamId, playerId);
+    const email = (request as any).user?.email;
+
+    return await this.playerService.buyPlayer(
+      teamId,
+      playerTeamId,
+      playerId,
+      email,
+    );
   }
 }
