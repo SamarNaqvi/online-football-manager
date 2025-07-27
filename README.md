@@ -48,7 +48,7 @@ A full-stack application to manage football teams online with features like team
   docker run -d -p 6379:6379 redis/redis-stack
   ```
 - Alternatively, make sure Redis is running locally and accessible.
-- You can check Redis connection via Redis CLI:
+- You can use this command in terminal for redis setup:
   ```
   docker run -d --name redis-stack -p 6379:6379 -p 8001:8001 redis/redis-stack:latest
   ```
