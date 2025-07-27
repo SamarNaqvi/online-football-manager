@@ -78,7 +78,7 @@ function TeamComponent({ notification }) {
     {
       setTimeout(()=>{
         refetch();
-      },[5000])
+      },[1000]);
       
     }
   }, [notification?.type]);
@@ -109,7 +109,7 @@ function TeamComponent({ notification }) {
     <div style={{ padding: "2rem", background: "#acd4f8ff" }}>
       <Flex vertical>
         <Title level={3}>{name}</Title>
-        <div style={{ fontSize: "18px" }}>Budget - ${budget}</div>
+        <div style={{ fontSize: "18px" }}>Budget: ${budget}</div>
       </Flex>
       <Flex
         gap={80}

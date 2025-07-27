@@ -66,9 +66,11 @@ function TransferListComponent({notification}) {
 
   useEffect(()=>{
 
-    if(notification?.type === "change-status")
+    if(notification?.type === "change-status" || notification?.type === "buy-player")
       {
-         refetch();
+        setTimeout(()=>{
+        refetch();
+      },[1000]);
       }
   },[notification?.type]);
 
