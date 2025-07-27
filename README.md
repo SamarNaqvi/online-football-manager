@@ -13,7 +13,24 @@ A full-stack application to manage football teams online with features like team
     cd client && yarn install
 ```
 
-2. Run the Front-end: 
+2. Firebase Setup:
+
+   1. Go to Firebase console https://firebase.google.com/
+   2. Create a new project type messaging
+   3. Create an .env file inside the client folder i.e., client/.env and paste the keys like this:
+   ```
+        VITE_VAPID_KEY=""
+        VITE_FIREBASE_API_KEY=""
+        VITE_FIREBASE_AUTH_DOMAIN=""
+        VITE_FIREBASE_PROJECT_ID=""
+        VITE_FIREBASE_STORAGE_BUCKET=""
+        VITE_FIREBASE_MESSAGIN_SENDER_ID=""
+        VITE_FIREBASE_APP_ID=""
+        VITE_FIREBASE_MEASUREMENT_ID=""
+   ```
+   4. In client/public/firebase-messaging-sw.js file paste same keys there as well.
+
+3. Run the Front-end: 
 ```
     yarn dev
 ```
@@ -37,7 +54,21 @@ A full-stack application to manage football teams online with features like team
   docker run -d --name redis-stack -p 6379:6379 -p 8001:8001 redis/redis-stack:latest
   ```
 
-4. **Run the backend services:**
+3. **Firebase keys setup**
+    - create an .env file insider server i.e., server/.env and paste the key values here
+    ```
+        FIREBASE_PROJECT_ID=""
+        FIREBASE_CLIENT_EMAIL=""
+        FIREBASE_PRIVATE_KEY=""
+    ```
+4. **Database setup**
+    For database, I used prisma and mysql, just add the following variable to your .env created above:
+         DATABASE_URL="mysql://root:123456@localhost:3306/football_manager" 
+    mysql is name of database
+    12345 is database password of root user
+    football_manager is database name I created   
+
+5. **Run the backend services:**
 
 Open two separate terminals:
 

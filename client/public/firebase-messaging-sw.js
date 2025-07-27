@@ -3,14 +3,15 @@
 importScripts('https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js');
 importScripts('https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging-compat.js');
 
+// put the same values here that are being used in firebase.ts
 firebase.initializeApp({
-  apiKey: "AIzaSyAa2Jox3xi6QiBOYxzd3gf8NewrldMu5K4",
-  authDomain: "football-manager-db452.firebaseapp.com",
-  projectId: "football-manager-db452",
-  storageBucket: "football-manager-db452.firebasestorage.app",
-  messagingSenderId: "985029294117",
-  appId: "1:985029294117:web:76536f85e850216f3b67cc",
-  measurementId: "G-ZBCS998C7M"
+  apiKey: "",
+  authDomain: "",
+  projectId: "",
+  storageBucket: "",
+  messagingSenderId: "",
+  appId: "",
+  measurementId: ""
 });
 
 const messaging = firebase.messaging();
