@@ -9,15 +9,21 @@ A full-stack application to manage football teams online with features like team
 ### Frontend
 
 1. Navigate to the client directory:
+ ```
     cd client && yarn install
+```
 
 2. Run the Front-end: 
+```
     yarn dev
+```
 
 ### Backend
 
 1. open a new terminal and Navigate to server directory:
-    cd server && yarn install
+   ``` 
+   cd server && yarn install
+   ```
 
 2. **Redis Setup:**
 - If you have Docker Desktop, install and run the Redis Stack image:
