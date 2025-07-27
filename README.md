@@ -64,9 +64,9 @@ A full-stack application to manage football teams online with features like team
 4. **Database setup**
     For database, I used prisma and mysql, just add the following variable to your .env created above:
          DATABASE_URL="mysql://root:123456@localhost:3306/football_manager" 
-    mysql is name of database
-    12345 is database password of root user
-    football_manager is database name I created   
+    - mysql is name of database,
+    - 12345 is database password of root user
+    - football_manager is database name I created   
 
 5. **Run the backend services:**
 
