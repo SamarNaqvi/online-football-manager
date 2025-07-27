@@ -2,8 +2,6 @@
 
 A full-stack application to manage football teams online with features like team creation, player transfers, notifications, and more.
 
----
-
 ## Setup Guidelines
 
 ### Frontend
