@@ -67,6 +67,11 @@ A full-stack application to manage football teams online with features like team
     - 12345 is database password of root user
     - football_manager is database name I created   
 
+    - Run this command:
+    ```
+        npx prisma migrate dev --name init
+    ```
+
 5. **Run the backend services:**
 
 Open two separate terminals:
