@@ -27,6 +27,7 @@ A full-stack application to manage football teams online with features like team
         VITE_FIREBASE_MEASUREMENT_ID=""
    ```
    4. In client/public/firebase-messaging-sw.js file paste same keys there as well.
+   5. You can refer to this for a basic walkthrough on integrating FCM. https://www.youtube.com/watch?v=IK8x7qc9ZsA&t=110s
 
 3. Run the Front-end: 
 ```
